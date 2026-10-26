@@ -32,3 +32,8 @@ def greeting(name: str):
         "hostname": socket.gethostname(),
         "IP": get_local_ip()
     }
+
+
+@app.post("/multiply")
+def multiply(a: float, b: float):
+    return {"result": a * b}
