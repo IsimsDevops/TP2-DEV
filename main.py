@@ -3,7 +3,10 @@ from fastapi import FastAPI
 import socket
 
 app = FastAPI()
-
+items = {
+    1: {"name": "Produit A"},
+    2: {"name": "Produit B"}
+}
 @app.get("/")
 def read_root():
     return {"message": "it works !"}
@@ -32,3 +35,10 @@ def greeting(name: str):
         "hostname": socket.gethostname(),
         "IP": get_local_ip()
     }
+
+@app.put("/update/{id}")
+def update_item(id: int, name: str):
+    if id not in items:
+        return {"error": "Élément introuvable"}
+    items[id]["name"] = name
+    return {"message": "Élément modifié", "item": items[id]}
