@@ -3,10 +3,12 @@ from fastapi import FastAPI
 import socket
 
 app = FastAPI()
+
 items = {
     1: {"name": "Produit A"},
     2: {"name": "Produit B"}
 }
+
 @app.get("/")
 def read_root():
     return {"message": "it works !"}
@@ -51,3 +53,10 @@ def divide(a: float, b: float):
 @app.post("/multiply")
 def multiply(a: float, b: float):
     return {"result": a * b}
+
+@app.delete("/remove/{id}")
+def remove_item(id: int):
+    if id not in items:
+        return {"error": "Élément introuvable"}
+    del items[id]
+    return {"message": f"Élément {id} supprimé"}
