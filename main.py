@@ -4,6 +4,11 @@ import socket
 
 app = FastAPI()
 
+items = {
+    1: {"name": "Produit A"},
+    2: {"name": "Produit B"}
+}
+
 @app.get("/")
 def read_root():
     return {"message": "it works !"}
@@ -33,6 +38,12 @@ def greeting(name: str):
         "IP": get_local_ip()
     }
 
+@app.put("/update/{id}")
+def update_item(id: int, name: str):
+    if id not in items:
+        return {"error": "Élément introuvable"}
+    items[id]["name"] = name
+    return {"message": "Élément modifié", "item": items[id]}
 @app.post("/divide")
 def divide(a: float, b: float):
     if b == 0:
@@ -42,3 +53,10 @@ def divide(a: float, b: float):
 @app.post("/multiply")
 def multiply(a: float, b: float):
     return {"result": a * b}
+
+@app.delete("/remove/{id}")
+def remove_item(id: int):
+    if id not in items:
+        return {"error": "Élément introuvable"}
+    del items[id]
+    return {"message": f"Élément {id} supprimé"}
